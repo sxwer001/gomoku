@@ -1,0 +1,27 @@
+{
+  "name": "gomoku",
+  "version": "1.0.1",
+  "private": true,
+  "description": "五子棋：本地双人 / 人机对战，含网页版、Windows 桌面版与安卓版（AI 基于 @algorithm.ts/gomoku，MIT）",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:desktop": "node tools/build-desktop.mjs",
+    "build:android": "pwsh -File tools/build-android.ps1",
+    "build:all": "node build.mjs && node tools/build-desktop.mjs && pwsh -File tools/build-android.ps1",
+    "icons": "python tools/make-icons.py",
+    "test": "node tools/bench.mjs && node tools/browser-test.mjs && node tools/test-desktop.mjs",
+    "bench": "node tools/bench.mjs",
+    "stress": "node tools/stress.mjs",
+    "diag": "node tools/diag.mjs",
+    "browser-test": "node tools/browser-test.mjs",
+    "test:desktop": "node tools/test-desktop.mjs"
+  },
+  "dependencies": {
+    "@algorithm.ts/gomoku": "4.0.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "puppeteer-core": "^25.12.0"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "gomoku-desktop",
+  "version": "1.0.1",
+  "private": true,
+  "description": "五子棋桌面版",
+  "main": "main.js",
+  "author": "Gomoku",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^38.2.2",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.gomoku.desktop",
+    "productName": "五子棋",
+    "copyright": "AI 引擎 @algorithm.ts/gomoku (MIT)",
+    "directories": {
+      "output": "../release/windows",
+      "buildResources": "build"
+    },
+    "electronLanguages": ["zh-CN", "en-US"],
+    "compression": "maximum",
+    "files": [
+      "main.js",
+      "app/**/*",
+      "build/icon.ico"
+    ],
+    "win": {
+      "target": [
+        { "target": "portable", "arch": ["x64"] },
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "Gomoku-Desktop-${version}-${env.TARGET_SUFFIX}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Gomoku-Desktop-${version}-portable.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "五子棋",
+      "artifactName": "Gomoku-Desktop-${version}-setup.exe"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="description" content="五子棋 · 本地双人或与 AI 对战">
+<title>五子棋 · Gomoku</title>
+<style>/*__CSS__*/</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><i class="st black"></i><i class="st white"></i></div>
+      <div class="brand-text">
+        <h1>五子棋</h1>
+        <p>本地双人 / 人机对战</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="btnSound" title="音效开关" aria-label="音效开关">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.6 5.4a9 9 0 0 1 0 13.2"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btnFull" title="全屏" aria-label="全屏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+          <path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="board-card">
+      <div class="board-bar">
+        <span class="board-badge" id="turnBadge"><span class="dot"></span><span>黑棋回合</span></span>
+        <span class="counter" id="moveCounter">第 0 手</span>
+      </div>
+      <div class="board-stage">
+        <div class="board-frame">
+          <canvas id="board" aria-label="五子棋棋盘"></canvas>
+        </div>
+      </div>
+      <div class="board-foot">
+        <span id="footHint">点击棋盘落子</span>
+        <span class="keys">快捷键：Ctrl+Z 悔棋 · R 重开 · H 提示</span>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="card">
+        <div class="player" id="pBlack">
+          <span class="stone-chip black"></span>
+          <div class="p-meta"><b>黑棋</b><small id="roleBlack">玩家 1</small></div>
+          <span class="p-score" id="scoreBlack">0</span>
+        </div>
+        <div class="player" id="pWhite">
+          <span class="stone-chip white"></span>
+          <div class="p-meta"><b>白棋</b><small id="roleWhite">玩家 2</small></div>
+          <span class="p-score" id="scoreWhite">0</span>
+        </div>
+        <div class="status" id="status">轮到黑棋落子</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">操作</div>
+        <div class="btn-row">
+          <button class="btn" id="btnUndo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>
+            </svg>悔棋
+          </button>
+          <button class="btn" id="btnHint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.5 18h5"/><path d="M10 21.5h4"/><path d="M12 2.5a6.5 6.5 0 0 0-3.8 11.8V17h7.6v-2.7A6.5 6.5 0 0 0 12 2.5z"/>
+            </svg>提示
+          </button>
+          <button class="btn primary wide" id="btnRestart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/>
+            </svg>重新开始
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">设置</div>
+        <div class="field">
+          <label>对战模式</label>
+          <div class="seg" id="segMode">
+            <button data-v="pve">人机对战</button>
+            <button data-v="pvp">本地双人</button>
+          </div>
+        </div>
+        <div class="field" id="fieldLevel">
+          <label>AI 难度</label>
+          <div class="seg" id="segLevel">
+            <button data-v="easy">简单</button>
+            <button data-v="medium">普通</button>
+            <button data-v="hard">困难</button>
+          </div>
+        </div>
+        <div class="field" id="fieldSide">
+          <label>我方执子</label>
+          <div class="seg" id="segSide">
+            <button data-v="black">执黑先行</button>
+            <button data-v="white">执白后行</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>棋盘风格</label>
+          <div class="seg" id="segSkin">
+            <button data-v="clean">简洁</button>
+            <button data-v="wood">木纹</button>
+          </div>
+        </div>
+        <div class="switches">
+          <label class="switch"><input type="checkbox" id="optCoord" checked><span class="track"></span>显示坐标</label>
+          <label class="switch"><input type="checkbox" id="optIndex"><span class="track"></span>显示手数</label>
+          <label class="switch"><input type="checkbox" id="optSound" checked><span class="track"></span>落子音效</label>
+        </div>
+      </div>
+
+      <div class="card history-card">
+        <div class="card-title">棋谱 <span class="count" id="histCount">0</span></div>
+        <div class="history" id="history"><div class="history-empty">暂无落子</div></div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true">
+    <div class="dialog-stone black" id="dlgStone"></div>
+    <h2 id="dlgTitle">黑棋获胜</h2>
+    <p id="dlgDesc">共 0 手</p>
+    <div class="dialog-actions">
+      <button class="btn primary" id="btnAgain">再来一局</button>
+      <button class="btn" id="btnCloseDlg">查看棋盘</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<!-- AI 逻辑以内联脚本 + Blob Worker 运行，完全离线 -->
+<script>window.__AI_WORKER_SRC__ = /*__WORKER_SRC__*/'';</script>
+<script>/*__APP__*/</script>
+</body>
+</html>

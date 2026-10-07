@@ -1,0 +1,15 @@
+# 依赖
+node_modules/
+
+# 构建产物与临时文件（都会由脚本重新生成）
+/dist/
+/build/
+/release/
+/desktop/app/
+/shots/
+*.idsig
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
